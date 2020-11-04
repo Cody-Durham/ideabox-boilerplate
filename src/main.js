@@ -2,14 +2,22 @@ var saveButton = document.querySelector('#save-button');
 var cardGrid = document.querySelector('.card-grid');
 var titleInput = document.querySelector('.title-input');
 var bodyInput = document.querySelector('.body-input');
-var ideas = [];
 var ideaForm = document.querySelector('.idea-form');
+var makeCommentPopUp = document.querySelector('#make-comment-pop-up');
+var commentInput = document.querySelector('#comment-input');
+var submitCommentButton = document.querySelector('#submit-comment');
+var commentForm = document.querySelector('.comment-form');
+var filterIdeasButton = document.querySelector('.show-starred')
+var ideas = [];
+//var commentedIdea = {};
 
 
 //add event listeners here 🍊
 saveButton.addEventListener('click', makeNewIdeaCard);
 cardGrid.addEventListener('click', upDateIdea);
 ideaForm.addEventListener('keyup', toggleSaveButton);
+submitCommentButton.addEventListener('click', addCommentToIdea);
+filterIdeasButton.addEventListener('click', filterStarredIdeas)
 window.addEventListener('load', updateFromStorage);
 
 //add functions here 🍊
@@ -26,7 +34,7 @@ function makeNewIdeaCard() {
     var newIdea = new Idea(titleInput.value, bodyInput.value);
     ideas.push(newIdea);
     newIdea.saveToStorage();
-    upDateCardGrid();
+    upDateCardGrid(ideas);
     clearFields(titleInput, bodyInput);
 };
 
@@ -36,22 +44,22 @@ function clearFields(title, body) {
     toggleSaveButton();
 };
 
-function upDateCardGrid() {
-    newGrid = ""; // need to set this with a var
-    for (var i = 0; i < ideas.length; i++) {
+function upDateCardGrid(array) {
+    newGrid = '';
+    for (var i = 0; i < array.length; i++) {
         newGrid +=
-            `<section class="idea-card">
-          <div class="fav-delete-header">
-            <input type="image" id="star-${ideas[i].id}" class="star" src="${testForStar(ideas[i])}">
-            <input type="image" id="delete-card-${ideas[i].id}" class="delete-card" src="./assets/delete.svg">
+            `<section class='idea-card'>
+          <div class='fav-delete-header'>
+            <input type='image' id='star-${array[i].id}' class='star' src='${testForStar(array[i])}'>
+            <input type='image' id='delete-card-${array[i].id}' class='delete-card' src='./assets/delete.svg'>
           </div>
-          <div class="idea-content">
-            <p class="idea-title">${ideas[i].title}</p>
-            <p class="idea-body">${ideas[i].body}</p>
+          <div class='idea-content'>
+            <p class='idea-title'>${array[i].title}</p>
+            <p class='idea-body'>${array[i].body}</p>
           </div>
-          <div class="comment-strip">
-            <input type="image" id="idea-comment" name="comment" src="./assets/comment.svg">
-            <label for="comment">Comment</label>
+          <div class='comment-strip'>
+            <input type='image' class='idea-comment' id='idea-comment-${array[i].id}' name='comment' src='./assets/comment.svg'>
+            <label for='comment'>Comment</label>
           </div>
           </section>`;
     }
@@ -63,23 +71,47 @@ function upDateIdea() {
         deleteIdea();
     } else if (checkForButtonType('star')) {
         starIdea();
+    } else if(checkForButtonType('idea-comment')) {
+       openCommentForm();
     }
-    upDateCardGrid();
+    upDateCardGrid(ideas);
+};
+
+function openCommentForm() {
+  makeCommentPopUp.showModal();
+  for (var i = 0; i < ideas.length; i++) {
+      if (testForMatchAmongIdeas(`idea-comment`, i, event.target.id)) {
+        commentForm.id = `form-${ideas[i].id}`;
+      }
+    }
+};
+
+
+function addCommentToIdea() {
+  var newComment = new Comment(commentInput.value);
+  for (var i = 0; i < ideas.length; i++) {
+    console.log(testForMatchAmongIdeas(`form`, i, commentForm.id));
+    if (testForMatchAmongIdeas(`form`, i, commentForm.id)) {
+      ideas[i].comments.push(newComment);
+      ideas[i].updateLocallyStoredIdea();
+    }
+  }
+  makeCommentPopUp.close();
 };
 
 function checkForButtonType(iDPrefix) {
   return event.target.id.includes(iDPrefix);
 };
 
-function testForMatchAmongIdeas(targetIDPrefix, index) {
-  if (`${targetIDPrefix}-${ideas[index].id}` === event.target.id) {
+function testForMatchAmongIdeas(targetIDPrefix, index, targetID) {
+  if (`${targetIDPrefix}-${ideas[index].id}` === targetID) {
     return true
   }
 };
 
 function deleteIdea() {
   for (var i = 0; i < ideas.length; i++) {
-      if (testForMatchAmongIdeas(`delete-card`, i)) {
+      if (testForMatchAmongIdeas(`delete-card`, i, event.target.id)) {
         ideas[i].deleteFromStorage();
         ideas.splice(i, 1);
       }
@@ -88,7 +120,7 @@ function deleteIdea() {
 
   function starIdea() {
     for (var i = 0; i < ideas.length; i++) {
-        if (testForMatchAmongIdeas(`star`, i)) {
+        if (testForMatchAmongIdeas(`star`, i, event.target.id)) {
             ideas[i].toggleStar();
             ideas[i].updateLocallyStoredIdea();
         }
@@ -108,10 +140,24 @@ function updateFromStorage () {
     var keyName = localStorage.key(i);
     var retrievedIdea = localStorage.getItem(keyName);
     var parsedIdea = JSON.parse(retrievedIdea);
-
     var oldIdeaFromStorage = new Idea(parsedIdea.title, parsedIdea.body, parsedIdea.id, parsedIdea.star, parsedIdea.comments);
-
     ideas.push(oldIdeaFromStorage);
   }
-  upDateCardGrid();
+  upDateCardGrid(ideas);
+};
+
+function filterStarredIdeas() {
+  if (filterIdeasButton.innerText === 'Show All Ideas') {
+    upDateCardGrid(ideas);
+    filterIdeasButton.innerText = 'Show Starred Ideas';
+  } else {
+    var starredIdeas = [];
+    for (var i = 0; i < ideas.length; i++) {
+      if (ideas[i].star) {
+        starredIdeas.push(ideas[i]);
+      }
+    }
+    upDateCardGrid(starredIdeas);
+    filterIdeasButton.innerText = 'Show All Ideas';
+  }
 };
