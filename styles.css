@@ -1,7 +1,3 @@
-html {
-    height: 100%;
-}
-
 main {
     display: flex;
     height: 100%;
@@ -133,6 +129,7 @@ h1 {
     font-size: .75em;
     font-weight: bold;
 }
+
 :disabled,
 .save-button {
     width: 100%;
@@ -144,14 +141,14 @@ h1 {
 }
 
 .save-button {
-  background-color: #353567;
-  color: #ffffff;
+    background-color: #353567;
+    color: #ffffff;
 }
 
 :disabled {
-  background-color: #e2c9f0;
-  color: #817487;
-  cursor: not-allowed;
+    background-color: #e2c9f0;
+    color: #817487;
+    cursor: not-allowed;
 }
 
 .search {
