@@ -22,11 +22,11 @@ window.addEventListener('load', updateFromStorage);
 
 //add functions here 🍊
 function toggleSaveButton() {
-  if (titleInput.value === '' || bodyInput.value === '') {
-    saveButton.disabled = true;
-  } else {
-    saveButton.disabled = false;
-  }
+    if (titleInput.value === '' || bodyInput.value === '') {
+        saveButton.disabled = true;
+    } else {
+        saveButton.disabled = false;
+    }
 };
 
 
@@ -71,61 +71,61 @@ function upDateIdea() {
         deleteIdea();
     } else if (checkForButtonType('star')) {
         starIdea();
-    } else if(checkForButtonType('idea-comment')) {
-       openCommentForm();
+    } else if (checkForButtonType('idea-comment')) {
+        openCommentForm();
     }
     upDateCardGrid(ideas);
 };
 
 function openCommentForm() {
-  makeCommentPopUp.showModal();
-  for (var i = 0; i < ideas.length; i++) {
-      if (testForMatchAmongIdeas(`idea-comment`, i, event.target.id)) {
-        commentForm.id = `form-${ideas[i].id}`;
-      }
+    makeCommentPopUp.showModal();
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`idea-comment`, i, event.target.id)) {
+            commentForm.id = `form-${ideas[i].id}`;
+        }
     }
 };
 
 
 function addCommentToIdea() {
-  var newComment = new Comment(commentInput.value);
-  for (var i = 0; i < ideas.length; i++) {
-    console.log(testForMatchAmongIdeas(`form`, i, commentForm.id));
-    if (testForMatchAmongIdeas(`form`, i, commentForm.id)) {
-      ideas[i].comments.push(newComment);
-      ideas[i].updateLocallyStoredIdea();
+    var newComment = new Comment(commentInput.value);
+    for (var i = 0; i < ideas.length; i++) {
+        console.log(testForMatchAmongIdeas(`form`, i, commentForm.id));
+        if (testForMatchAmongIdeas(`form`, i, commentForm.id)) {
+            ideas[i].comments.push(newComment);
+            ideas[i].updateLocallyStoredIdea();
+        }
     }
-  }
-  makeCommentPopUp.close();
+    makeCommentPopUp.close();
 };
 
 function checkForButtonType(iDPrefix) {
-  return event.target.id.includes(iDPrefix);
+    return event.target.id.includes(iDPrefix);
 };
 
 function testForMatchAmongIdeas(targetIDPrefix, index, targetID) {
-  if (`${targetIDPrefix}-${ideas[index].id}` === targetID) {
-    return true
-  }
+    if (`${targetIDPrefix}-${ideas[index].id}` === targetID) {
+        return true
+    }
 };
 
 function deleteIdea() {
-  for (var i = 0; i < ideas.length; i++) {
-      if (testForMatchAmongIdeas(`delete-card`, i, event.target.id)) {
-        ideas[i].deleteFromStorage();
-        ideas.splice(i, 1);
-      }
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`delete-card`, i, event.target.id)) {
+            ideas[i].deleteFromStorage();
+            ideas.splice(i, 1);
+        }
     }
-  };
+};
 
-  function starIdea() {
+function starIdea() {
     for (var i = 0; i < ideas.length; i++) {
         if (testForMatchAmongIdeas(`star`, i, event.target.id)) {
             ideas[i].toggleStar();
             ideas[i].updateLocallyStoredIdea();
         }
-      }
-    };
+    }
+};
 
 function testForStar(idea) {
     if (idea.star === true) {
@@ -135,29 +135,43 @@ function testForStar(idea) {
     }
 };
 
-function updateFromStorage () {
-  for (var i = 0; i < localStorage.length; i++) {
-    var keyName = localStorage.key(i);
-    var retrievedIdea = localStorage.getItem(keyName);
-    var parsedIdea = JSON.parse(retrievedIdea);
-    var oldIdeaFromStorage = new Idea(parsedIdea.title, parsedIdea.body, parsedIdea.id, parsedIdea.star, parsedIdea.comments);
-    ideas.push(oldIdeaFromStorage);
-  }
-  upDateCardGrid(ideas);
+function updateFromStorage() {
+    for (var i = 0; i < localStorage.length; i++) {
+        var keyName = localStorage.key(i);
+        var retrievedIdea = localStorage.getItem(keyName);
+        var parsedIdea = JSON.parse(retrievedIdea);
+        var oldIdeaFromStorage = new Idea(parsedIdea.title, parsedIdea.body, parsedIdea.id, parsedIdea.star, parsedIdea.comments);
+        ideas.push(oldIdeaFromStorage);
+    }
+    upDateCardGrid(ideas);
 };
 
 function filterStarredIdeas() {
-  if (filterIdeasButton.innerText === 'Show All Ideas') {
-    upDateCardGrid(ideas);
-    filterIdeasButton.innerText = 'Show Starred Ideas';
-  } else {
-    var starredIdeas = [];
-    for (var i = 0; i < ideas.length; i++) {
-      if (ideas[i].star) {
-        starredIdeas.push(ideas[i]);
-      }
+    if (filterIdeasButton.innerText === 'Show All Ideas') {
+        upDateCardGrid(ideas);
+        filterIdeasButton.innerText = 'Show Starred Ideas';
+    } else {
+        var starredIdeas = [];
+        for (var i = 0; i < ideas.length; i++) {
+            if (ideas[i].star) {
+                starredIdeas.push(ideas[i]);
+            }
+        }
+        upDateCardGrid(starredIdeas);
+        filterIdeasButton.innerText = 'Show All Ideas';
     }
-    upDateCardGrid(starredIdeas);
-    filterIdeasButton.innerText = 'Show All Ideas';
-  }
 };
+
+
+//1. fix flex wrap of ideas txt
+// 2 .search bar functionality
+// 3.body-input
+// 4. responsive design
+//readme
+
+//show comments
+//show comments button on all cards from begining, bottom right
+//query show comment button, listen to vard grid ( like star or delete)
+//new modal popup
+// access idea clicked on andfor loop throu all comments
+//+= comments innerHTML and insert into modal
