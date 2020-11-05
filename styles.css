@@ -192,6 +192,7 @@ h1 {
 
 .comment-strip {
     display: flex;
+    /* justify-content: space-between; */
     align-items: center;
     color: #ffffff;
     font-weight: bold;
@@ -223,4 +224,13 @@ h1 {
     height: 10000px;
     display: flex;
     flex-direction: column;
+}
+
+.show-comments {
+    margin-left: 18%;
+    background-color: #A9AAD2;
+    color: #ffffff;
+    font-family: Open Sans;
+    font-weight: bold;
+    border-radius: 4px;
 }

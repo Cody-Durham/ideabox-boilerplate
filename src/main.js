@@ -9,7 +9,10 @@ var submitCommentButton = document.querySelector('#submit-comment');
 var commentForm = document.querySelector('.comment-form');
 var filterIdeasButton = document.querySelector('.show-starred');
 var searchInput = document.querySelector('.search-ideas-box');
+var commentsDisplayGrid = document.querySelector('#comments-display')
 var searchButton = document.querySelector('.search-icon');
+var closeCommentsButton = document.querySelector('.close-comments-display');
+var commentBox = document.querySelector('#comment-box');
 var ideas = [];
 
 
@@ -22,6 +25,7 @@ submitCommentButton.addEventListener('click', addCommentToIdea);
 filterIdeasButton.addEventListener('click', filterStarredIdeas);
 searchButton.addEventListener('click', searchIdeas);
 searchInput.addEventListener('keyup', clearSearch);
+closeCommentsButton.addEventListener('click', closeCommentsDisplay);
 window.addEventListener('load', updateFromStorage);
 
 //add functions here 🍊
@@ -64,6 +68,7 @@ function upDateCardGrid(array) {
           <div class='comment-strip'>
             <input type='image' class='idea-comment' id='idea-comment-${array[i].id}' name='comment' src='./assets/comment.svg'>
             <label for='comment'>Comment</label>
+            <button type='button' class='show-comments' id='show-comment-${array[i].id}'>Show Comments (${array[i].comments.length})</button>
           </div>
           </section>`;
     }
@@ -77,6 +82,8 @@ function upDateIdea() {
         starIdea();
     } else if (checkForButtonType('idea-comment')) {
         openCommentForm();
+    } else if (checkForButtonType('show-comment')) {
+        displayComments();
     }
     upDateCardGrid(ideas);
 };
@@ -189,18 +196,19 @@ function clearSearch() {
 };
 
 
+function displayComments() {
+    var commentsGrid = '';
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`show-comment`, i, event.target.id)) {
+            for (var g = 0; g < ideas[i].comments.length; g++) {
+                commentsGrid += `<p>${ideas[i].comments[g].content}</p>`;
+            }
+        }
+    }
+    commentBox.innerHTML = commentsGrid;
+    commentsDisplayGrid.showModal();
+};
 
-
-
-//1. fix flex wrap of ideas txt
-// 2 .search bar functionality
-// 3.body-input
-// 4. responsive design
-//readme
-
-//show comments
-//show comments button on all cards from begining, bottom right
-//query show comment button, listen to vard grid ( like star or delete)
-//new modal popup
-// access idea clicked on andfor loop throu all comments
-//+= comments innerHTML and insert into modal
+function closeCommentsDisplay() {
+    commentsDisplayGrid.close();
+};
