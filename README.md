@@ -30,8 +30,6 @@ The Ideabox site allows you to create and save ideas in a grid of sticky-note li
 #### Make an idea
 #### <a name ="Make-an-idea"></a>
 
-<a name=“Make”-an-idea></a> 
-
   To make and save a new idea, enter the idea's title and body into the title and body input boxes at the top of the page. Click the "Save Idea" button, and the idea you have saved will appear in a card in the grid on the bottom half of the screen. Note that you cannot save an idea if either the title input box or the body input box is empty, because the "Save Button" will be disabled, as indicated by its muted color.
 
 #### Star an idea
