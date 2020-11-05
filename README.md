@@ -46,8 +46,6 @@ The Ideabox site allows you to create and save ideas in a grid of sticky-note li
 
   To filter ideas based on their starred status, click the "Show Starred Ideas" button on the top left side of the window, and only ideas that are starred will display. To reset, click the same button again (it now reads "Show All Ideas"), and all ideas will display.
 
-
-
 ### Search an idea
 #### <a name ="Search-an-idea"></a>
 
@@ -61,7 +59,9 @@ To reset, delete any text in the search box, and all ideas will display.
 To add a comment to an idea, click the '+' button on the bottom left of the idea card for the idea on which you wish to comment.
 A pop-up form will appear with an input box for your comment text. Enter your comment into the input box and click the submit button. The pop-up box will disappear and .....
 
-
+<p align = "center">
+<img src="https://gph.is/g/Eq0BOpx">
+</p>
 ---
 ## Technologies
 JavaScript, HTML & CSS
