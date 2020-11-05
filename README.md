@@ -37,7 +37,7 @@ The Ideabox site allows you to create and save ideas in a grid of sticky-note li
 #### Star an idea
 #### <a name ="Star-an-idea"></a>
 
-        To Star an idea, or in other words `favorite` it, the user must first look to the star to see it’s color. If it is white then it is not yet favorited and the user can click on the star itself in order to add that idea to the stared or `favorited` group of ideas. The star will turn to a dark orange when it has a stared stats.This information is also stored into the data model.
+  To Star an idea, or in other words `favorite` it, the user must first look to the star to see it’s color. If it is white then it is not yet favorited and the user can click on the star itself in order to add that idea to the stared or `favorited` group of ideas. The star will turn to a dark orange when it has a stared stats.This information is also stored into the data model.
 
 #### Delete an idea
 #### <a name ="Delete-an-idea"></a>
