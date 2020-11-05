@@ -60,8 +60,9 @@ To add a comment to an idea, click the '+' button on the bottom left of the idea
 A pop-up form will appear with an input box for your comment text. Enter your comment into the input box and click the submit button. The pop-up box will disappear and .....
 
 <p align = "center">
-<img src="https://gph.is/g/Eq0BOpx">
+<img src="https://media.giphy.com/media/POV8jlA1C9f8Ky3EFF/giphy.gif">
 </p>
+
 ---
 ## Technologies
 JavaScript, HTML & CSS
