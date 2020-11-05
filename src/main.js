@@ -7,9 +7,11 @@ var makeCommentPopUp = document.querySelector('#make-comment-pop-up');
 var commentInput = document.querySelector('#comment-input');
 var submitCommentButton = document.querySelector('#submit-comment');
 var commentForm = document.querySelector('.comment-form');
-var filterIdeasButton = document.querySelector('.show-starred')
+var filterIdeasButton = document.querySelector('.show-starred');
+var searchInput = document.querySelector('.search-ideas-box');
+var searchButton = document.querySelector('.search-icon');
 var ideas = [];
-//var commentedIdea = {};
+
 
 
 //add event listeners here 🍊
@@ -17,7 +19,9 @@ saveButton.addEventListener('click', makeNewIdeaCard);
 cardGrid.addEventListener('click', upDateIdea);
 ideaForm.addEventListener('keyup', toggleSaveButton);
 submitCommentButton.addEventListener('click', addCommentToIdea);
-filterIdeasButton.addEventListener('click', filterStarredIdeas)
+filterIdeasButton.addEventListener('click', filterStarredIdeas);
+searchButton.addEventListener('click', searchIdeas);
+searchInput.addEventListener('keyup', clearSearch);
 window.addEventListener('load', updateFromStorage);
 
 //add functions here 🍊
@@ -161,6 +165,31 @@ function filterStarredIdeas() {
         filterIdeasButton.innerText = 'Show All Ideas';
     }
 };
+
+function searchIdeas() {
+    event.preventDefault();
+    if (searchInput.value === '') {
+        upDateCardGrid(ideas);
+    } else {
+        var searchedIdeas = [];
+        for (var i = 0; i < ideas.length; i++) {
+            if (ideas[i].body.includes(searchInput.value) || ideas[i].title.includes(searchInput.value)) {
+                searchedIdeas.push(ideas[i]);
+
+            }
+        }
+        upDateCardGrid(searchedIdeas);
+    }
+};
+
+function clearSearch() {
+    if (searchInput.value === '') {
+        upDateCardGrid(ideas);
+    }
+};
+
+
+
 
 
 //1. fix flex wrap of ideas txt
