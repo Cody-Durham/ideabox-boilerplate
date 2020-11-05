@@ -7,9 +7,14 @@ var makeCommentPopUp = document.querySelector('#make-comment-pop-up');
 var commentInput = document.querySelector('#comment-input');
 var submitCommentButton = document.querySelector('#submit-comment');
 var commentForm = document.querySelector('.comment-form');
-var filterIdeasButton = document.querySelector('.show-starred')
+var filterIdeasButton = document.querySelector('.show-starred');
+var searchInput = document.querySelector('.search-ideas-box');
+var commentsDisplayGrid = document.querySelector('#comments-display')
+var searchButton = document.querySelector('.search-icon');
+var closeCommentsButton = document.querySelector('.close-comments-display');
+var commentBox = document.querySelector('#comment-box');
 var ideas = [];
-//var commentedIdea = {};
+
 
 
 //add event listeners here 🍊
@@ -17,16 +22,19 @@ saveButton.addEventListener('click', makeNewIdeaCard);
 cardGrid.addEventListener('click', upDateIdea);
 ideaForm.addEventListener('keyup', toggleSaveButton);
 submitCommentButton.addEventListener('click', addCommentToIdea);
-filterIdeasButton.addEventListener('click', filterStarredIdeas)
+filterIdeasButton.addEventListener('click', filterStarredIdeas);
+searchButton.addEventListener('click', searchIdeas);
+searchInput.addEventListener('keyup', clearSearch);
+closeCommentsButton.addEventListener('click', closeCommentsDisplay);
 window.addEventListener('load', updateFromStorage);
 
 //add functions here 🍊
 function toggleSaveButton() {
-  if (titleInput.value === '' || bodyInput.value === '') {
-    saveButton.disabled = true;
-  } else {
-    saveButton.disabled = false;
-  }
+    if (titleInput.value === '' || bodyInput.value === '') {
+        saveButton.disabled = true;
+    } else {
+        saveButton.disabled = false;
+    }
 };
 
 
@@ -60,6 +68,7 @@ function upDateCardGrid(array) {
           <div class='comment-strip'>
             <input type='image' class='idea-comment' id='idea-comment-${array[i].id}' name='comment' src='./assets/comment.svg'>
             <label for='comment'>Comment</label>
+            <button type='button' class='show-comments' id='show-comment-${array[i].id}'>Show Comments (${array[i].comments.length})</button>
           </div>
           </section>`;
     }
@@ -71,61 +80,63 @@ function upDateIdea() {
         deleteIdea();
     } else if (checkForButtonType('star')) {
         starIdea();
-    } else if(checkForButtonType('idea-comment')) {
-       openCommentForm();
+    } else if (checkForButtonType('idea-comment')) {
+        openCommentForm();
+    } else if (checkForButtonType('show-comment')) {
+        displayComments();
     }
     upDateCardGrid(ideas);
 };
 
 function openCommentForm() {
-  makeCommentPopUp.showModal();
-  for (var i = 0; i < ideas.length; i++) {
-      if (testForMatchAmongIdeas(`idea-comment`, i, event.target.id)) {
-        commentForm.id = `form-${ideas[i].id}`;
-      }
+    makeCommentPopUp.showModal();
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`idea-comment`, i, event.target.id)) {
+            commentForm.id = `form-${ideas[i].id}`;
+        }
     }
 };
 
 
 function addCommentToIdea() {
-  var newComment = new Comment(commentInput.value);
-  for (var i = 0; i < ideas.length; i++) {
-    console.log(testForMatchAmongIdeas(`form`, i, commentForm.id));
-    if (testForMatchAmongIdeas(`form`, i, commentForm.id)) {
-      ideas[i].comments.push(newComment);
-      ideas[i].updateLocallyStoredIdea();
+    var newComment = new Comment(commentInput.value);
+    for (var i = 0; i < ideas.length; i++) {
+        console.log(testForMatchAmongIdeas(`form`, i, commentForm.id));
+        if (testForMatchAmongIdeas(`form`, i, commentForm.id)) {
+            ideas[i].comments.push(newComment);
+            ideas[i].updateLocallyStoredIdea();
+        }
     }
-  }
-  makeCommentPopUp.close();
+    makeCommentPopUp.close();
 };
 
 function checkForButtonType(iDPrefix) {
-  return event.target.id.includes(iDPrefix);
+    return event.target.id.includes(iDPrefix);
 };
 
 function testForMatchAmongIdeas(targetIDPrefix, index, targetID) {
-  if (`${targetIDPrefix}-${ideas[index].id}` === targetID) {
-    return true
-  }
+    if (`${targetIDPrefix}-${ideas[index].id}` === targetID) {
+        return true
+    }
 };
 
 function deleteIdea() {
-  for (var i = 0; i < ideas.length; i++) {
-      if (testForMatchAmongIdeas(`delete-card`, i, event.target.id)) {
-        ideas[i].deleteFromStorage();
-        ideas.splice(i, 1);
-      }
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`delete-card`, i, event.target.id)) {
+            ideas[i].deleteFromStorage();
+            ideas.splice(i, 1);
+        }
     }
-  };
+};
 
-  function starIdea() {
+function starIdea() {
     for (var i = 0; i < ideas.length; i++) {
         if (testForMatchAmongIdeas(`star`, i, event.target.id)) {
             ideas[i].toggleStar();
             ideas[i].updateLocallyStoredIdea();
         }
-      }
-    };
+    }
+};
 
 function testForStar(idea) {
     if (idea.star === true) {
@@ -135,29 +146,69 @@ function testForStar(idea) {
     }
 };
 
-function updateFromStorage () {
-  for (var i = 0; i < localStorage.length; i++) {
-    var keyName = localStorage.key(i);
-    var retrievedIdea = localStorage.getItem(keyName);
-    var parsedIdea = JSON.parse(retrievedIdea);
-    var oldIdeaFromStorage = new Idea(parsedIdea.title, parsedIdea.body, parsedIdea.id, parsedIdea.star, parsedIdea.comments);
-    ideas.push(oldIdeaFromStorage);
-  }
-  upDateCardGrid(ideas);
+function updateFromStorage() {
+    for (var i = 0; i < localStorage.length; i++) {
+        var keyName = localStorage.key(i);
+        var retrievedIdea = localStorage.getItem(keyName);
+        var parsedIdea = JSON.parse(retrievedIdea);
+        var oldIdeaFromStorage = new Idea(parsedIdea.title, parsedIdea.body, parsedIdea.id, parsedIdea.star, parsedIdea.comments);
+        ideas.push(oldIdeaFromStorage);
+    }
+    upDateCardGrid(ideas);
 };
 
 function filterStarredIdeas() {
-  if (filterIdeasButton.innerText === 'Show All Ideas') {
-    upDateCardGrid(ideas);
-    filterIdeasButton.innerText = 'Show Starred Ideas';
-  } else {
-    var starredIdeas = [];
-    for (var i = 0; i < ideas.length; i++) {
-      if (ideas[i].star) {
-        starredIdeas.push(ideas[i]);
-      }
+    if (filterIdeasButton.innerText === 'Show All Ideas') {
+        upDateCardGrid(ideas);
+        filterIdeasButton.innerText = 'Show Starred Ideas';
+    } else {
+        var starredIdeas = [];
+        for (var i = 0; i < ideas.length; i++) {
+            if (ideas[i].star) {
+                starredIdeas.push(ideas[i]);
+            }
+        }
+        upDateCardGrid(starredIdeas);
+        filterIdeasButton.innerText = 'Show All Ideas';
     }
-    upDateCardGrid(starredIdeas);
-    filterIdeasButton.innerText = 'Show All Ideas';
-  }
+};
+
+function searchIdeas() {
+    event.preventDefault();
+    if (searchInput.value === '') {
+        upDateCardGrid(ideas);
+    } else {
+        var searchedIdeas = [];
+        for (var i = 0; i < ideas.length; i++) {
+            if (ideas[i].body.includes(searchInput.value) || ideas[i].title.includes(searchInput.value)) {
+                searchedIdeas.push(ideas[i]);
+
+            }
+        }
+        upDateCardGrid(searchedIdeas);
+    }
+};
+
+function clearSearch() {
+    if (searchInput.value === '') {
+        upDateCardGrid(ideas);
+    }
+};
+
+
+function displayComments() {
+    var commentsGrid = '';
+    for (var i = 0; i < ideas.length; i++) {
+        if (testForMatchAmongIdeas(`show-comment`, i, event.target.id)) {
+            for (var g = 0; g < ideas[i].comments.length; g++) {
+                commentsGrid += `<p>${ideas[i].comments[g].content}</p>`;
+            }
+        }
+    }
+    commentBox.innerHTML = commentsGrid;
+    commentsDisplayGrid.showModal();
+};
+
+function closeCommentsDisplay() {
+    commentsDisplayGrid.close();
 };

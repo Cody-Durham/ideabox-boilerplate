@@ -26,7 +26,7 @@
                     <label for='body'>Body</label>
                     <input type='text' name='body' class='body-input input-boxes'>
                 </div>
-                    <button id='save-button' class='save-button' type='button' disabled>Save</button>
+                <button id='save-button' class='save-button' type='button' disabled>Save</button>
                 <div class='search'>
                     <div class='search-icon-box'>
                         <input type='image' src='./assets/search.svg' class='search-icon'>
@@ -34,31 +34,37 @@
                     <input type='search' class='search-ideas-box' placeholder='Search ideas'></input>
                 </div>
             </form>
-            <section class='card-grid'>
-                <section class='idea-card'>
-                    <div class='fav-delete-header'>
-                        <input type='image' id='star' class='star' src='./assets/star.svg'>
-                        <input type='image' id='delete-card' class='delete-card' src='./assets/delete.svg'>
-                    </div>
-                    <div class='idea-content'>
-                        <p class='idea-title'>I Am The Title</p>
-                        <p class='idea-body'>Idea body. Don't ever play yourself. Every chance I get, I water the plants, Lion! Cloth talk.</p>
-                    </div>
-                    <div class='comment-strip'>
-                        <input type='image' class='idea-comment' id='idea-comment' name='comment' src='./assets/comment.svg'>
-                        <label for='comment'>Comment</label>
-                    </div>
-                </section>
+            <div class="idea-grid-box">
+                <section class='card-grid'>
+                    <section class='idea-card'>
+                        <div class='fav-delete-header'>
+                            <input type='image' id='star' class='star' src='./assets/star.svg'>
+                            <input type='image' id='delete-card' class='delete-card' src='./assets/delete.svg'>
+                        </div>
+                        <div class='idea-content'>
+                            <p class='idea-title'>I Am The Title</p>
+                            <p class='idea-body'>Idea body. Don't ever play yourself. Every chance I get, I water the plants, Lion! Cloth talk.</p>
+                        </div>
+                        <div class='comment-strip'>
+                            <input type='image' class='idea-comment' id='idea-comment' name='comment' src='./assets/comment.svg'>
+                            <label for='comment'>Comment</label>
+                        </div>
+            </div>
+            </section>
             </section>
         </article>
         <dialog class='make-comment-pop-up' id='make-comment-pop-up'>
-          <form class='comment-form'>
-            <h3 class='comment-form-header'>Type your comment below:</h3>
-            <input type='text' placeholder='comment' class='comment-input'id='comment-input'></input>
-            <button type='button' class='submit-comment' id='submit-comment'>Submit</button>
-          </form>
+            <form class='comment-form'>
+                <h3 class='comment-form-header'>Type your comment below:</h3>
+                <input type='text' placeholder='comment' class='comment-input' id='comment-input'></input>
+                <button type='button' class='submit-comment' id='submit-comment'>Submit</button>
+            </form>
         </dialog>
-    </main>
+        <dialog id='comments-display'>
+            <div id='comment-box'></div>
+            <button type='button' class='close-comments-display'>Close</button>
+        </dialog>
+        < </main>
 </body>
 <script src='./src/comment.js'></script>
 <script src='./src/idea.js'></script>
